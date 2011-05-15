@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <link href="http://www.trailguru.com/static/css/common.css" media="screen" rel="stylesheet" type="text/css" />    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript">
+    	// WATERMARK PLUGIN
+		(function($) {
+			$.fn.watermark = function(c, t) {
+				var e = function(e) {
+					var i = $(this);
+					if (!i.val()) {
+						var w = t || i.attr('title'), $c = $($("<div />").append(i.clone()).html().replace(/type=\"?password\"?/, 'type="text"')).val(w).addClass(c);
+						i.replaceWith($c);
+						$c.focus(function() {
+							$c.replaceWith(i); setTimeout(function() {i.focus();}, 1);
+						})
+						.change(function(e) {
+							i.val($c.val()); $c.val(w); i.val() && $c.replaceWith(i);
+						})
+						.closest('form').submit(function() {
+							$c.replaceWith(i);
+						});
+					}
+				};
+				return $(this).live('blur change', e).change();
+			};
+		})(jQuery);
+    </script>
+  </head>
+  <body>
+    <div style="margin-top:10px; margin-left:10px">
+<!--       <h2>'go' makes it easy to reach your favorite web locations.</h2>   -->
+	  <form method="POST" action="{% url tag.views.edit tag %}">
+	    <p>Typing 'go/{{tag}}' should redirect people to <input type="text" name="url" id="id_url" class="watermarked" value="{{url}}" title="http://www.importantstuff.com/" size="100" /><input type='submit' value='Do it' /></p>
+	  </form>
+	  
+	    <p style="font-size:6px;">Send complaints about this free service to <a href="mailto:tim@nestlabs.com">Tim</a>.</p>
+    </div>
+    
+    <script>
+	  $('.watermarked').watermark('watermark');
+	</script>
+
+  </body>
+</html>
